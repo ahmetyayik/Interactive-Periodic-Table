@@ -18,7 +18,10 @@ body {
 
 #periodic-table-container {
   display: grid;
-  grid-template-columns: repeat(18, 1fr); /* 18 columns like a real table */
+  grid-template-columns: repeat(
+    18,
+    1fr
+  ); /* 18 columns like a real periodic table */
   gap: 5px;
   margin-top: 20px;
 }
@@ -42,4 +45,38 @@ body {
 
 #modalSymbol {
   color: #0d6efd;
+}
+
+/* Element Category Colors */
+.alkali-metal {
+  background-color: #ff9d9d;
+}
+.alkaline-earth-metal {
+  background-color: #ffdead;
+}
+.transition-metal {
+  background-color: #f08080;
+}
+.noble-gas {
+  background-color: #c0d6e4;
+}
+.metalloid {
+  background-color: #cccc99;
+}
+.polyatomic-nonmetal,
+.diatomic-nonmetal {
+  background-color: #a0ffa0;
+}
+.post-transition-metal {
+  background-color: #cccccc;
+}
+.lanthanide {
+  background-color: #ffbfff;
+}
+.actinide {
+  background-color: #ff99cc;
+}
+.unknown,
+.unknown-but-predicted-to-be-an-alkali-metal {
+  background-color: #e8e8e8;
 }
