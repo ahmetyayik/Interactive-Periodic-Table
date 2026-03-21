@@ -21,6 +21,9 @@ function buildTable(elements) {
     const card = document.createElement("div");
     card.classList.add("element-card");
 
+    card.dataset.name = element.name.toLowerCase();
+    card.dataset.symbol = element.symbol.toLowerCase();
+
     const categoryClass = element.category.replace(/ /g, "-").toLowerCase();
     card.classList.add(categoryClass);
 
@@ -77,3 +80,28 @@ function showElementDetails(
 
 //SAYFA AÇILDIĞINDA SİSTEMİ ÇALIŞTIR
 loadPeriodicTable();
+
+// ARAMA MOTORU
+document
+  .getElementById("searchInput")
+  .addEventListener("input", function (event) {
+    const arananKelime = event.target.value.toLowerCase();
+    const butunKartlar = document.querySelectorAll(".element-card");
+    butunKartlar.forEach((kart) => {
+      const elementAdi = kart.dataset.name;
+      const elementSembolu = kart.dataset.symbol;
+
+      // Eğer yazılan harfler elementin adında VEYA sembolünde varsa:
+      if (
+        elementAdi.includes(arananKelime) ||
+        elementSembolu.includes(arananKelime)
+      ) {
+        kart.style.opacity = "1"; // Parlat
+        kart.style.transform = "scale(1)"; // Normal boyutta tut
+      } else {
+        // Eğer eşleşmiyorsa:
+        kart.style.opacity = "0.1"; // Gölge gibi yap (Saydamlaştır)
+        kart.style.transform = "scale(0.95)"; // Hafifçe küçült
+      }
+    });
+  });

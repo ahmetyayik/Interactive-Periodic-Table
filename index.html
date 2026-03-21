@@ -15,6 +15,23 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <nav class="navbar navbar-dark bg-dark mb-4 shadow-sm">
+      <div class="container-fluid px-4">
+        <span class="navbar-brand mb-0 h1 fs-2 fw-bold text-light">
+          🧪 Interactive Periodic Table
+        </span>
+
+        <form class="d-flex" onsubmit="return false;">
+          <input
+            class="form-control me-2"
+            type="search"
+            id="searchInput"
+            placeholder="Search element (e.g. Au, Iron)..."
+            aria-label="Search"
+          />
+        </form>
+      </div>
+    </nav>
     <div class="container mt-5">
       <header class="text-center mb-5">
         <h1>Interactive Periodic Table</h1>
