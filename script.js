@@ -20,12 +20,12 @@ function buildTable(elements) {
   elements.forEach((element) => {
     const card = document.createElement("div");
     card.classList.add("element-card");
+    const categoryClass = element.category.replace(/ /g, "-").toLowerCase();
+    card.classList.add(categoryClass);
+    card.dataset.category = categoryClass;
 
     card.dataset.name = element.name.toLowerCase();
     card.dataset.symbol = element.symbol.toLowerCase();
-
-    const categoryClass = element.category.replace(/ /g, "-").toLowerCase();
-    card.classList.add(categoryClass);
 
     //Elementi tablodaki doğru satır ve sütuna yerleştir
     card.style.gridColumn = element.xpos;
@@ -105,3 +105,27 @@ document
       }
     });
   });
+
+// KATEGORİ FİLTRELEME
+const filterButtons = document.querySelectorAll("#filter-buttons button");
+
+filterButtons.forEach((button) => {
+  button.addEventListener("click", function () {
+    //Tıklanan butonun "data-filter" değerini al
+    const secilenKategori = this.dataset.filter;
+    const butunKartlar = document.querySelectorAll(".element-card");
+    butunKartlar.forEach((kart) => {
+      if (
+        secilenKategori === "all" ||
+        kart.dataset.category === secilenKategori
+      ) {
+        kart.style.opacity = "1"; // Işıkları yak
+        kart.style.transform = "scale(1)"; // Normal boyuta getir
+      } else {
+        // Eşleşmeyen elementlerin ışığını kıs
+        kart.style.opacity = "0.1";
+        kart.style.transform = "scale(0.95)";
+      }
+    });
+  });
+});
