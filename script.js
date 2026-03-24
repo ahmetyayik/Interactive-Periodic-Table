@@ -13,6 +13,9 @@ function loadPeriodicTable() {
     .catch((error) => console.error("Veri çekilirken hata oluştu:", error));
 }
 
+let favoriler = JSON.parse(localStorage.getItem("kimyaFavoriler")) || [];
+let seciliElementSembolu = ""; // Hangi elementin modalı açık tutmak için
+
 // ELEMENTLERİ EKRANA DİZME
 function buildTable(elements) {
   const container = document.getElementById("periodic-table-container");
@@ -72,6 +75,18 @@ function showElementDetails(
   document.getElementById("modalDiscovery").innerText = discovery;
   document.getElementById("modalSummary").innerText = summary;
 
+  seciliElementSembolu = symbol.toLowerCase(); // Sembolü hafızaya al
+  const favBtn = document.getElementById("modalFavoriteBtn");
+
+  // Eğer bu element zaten favorilerde varsa, butonu "Çıkar" yap
+  if (favoriler.includes(seciliElementSembolu)) {
+    favBtn.innerText = "⭐ Discard Favorites";
+    favBtn.classList.replace("btn-warning", "btn-danger");
+  } else {
+    favBtn.innerText = "⭐ Add Favorites";
+    favBtn.classList.replace("btn-danger", "btn-warning");
+  }
+
   const elementModal = new bootstrap.Modal(
     document.getElementById("elementModal"),
   );
@@ -127,5 +142,41 @@ filterButtons.forEach((button) => {
         kart.style.transform = "scale(0.95)";
       }
     });
+  });
+});
+
+// MODAL İÇİNDEKİ YILDIZ BUTONUNA TIKLANINCA YAPILACAKLAR
+document
+  .getElementById("modalFavoriteBtn")
+  .addEventListener("click", function () {
+    // Eğer element zaten listedeyse, listeden at
+    if (favoriler.includes(seciliElementSembolu)) {
+      favoriler = favoriler.filter((sembol) => sembol !== seciliElementSembolu);
+      this.innerText = "⭐ Add Favorites";
+      this.classList.replace("btn-danger", "btn-warning");
+    } else {
+      // Eğer listede yoksa, listeye ekle
+      favoriler.push(seciliElementSembolu);
+      this.innerText = "⭐ Discard Favorites";
+      this.classList.replace("btn-warning", "btn-danger");
+    }
+
+    // Değişen listeyi tarayıcının çekmecesine (localStorage) geri koy
+    localStorage.setItem("kimyaFavoriler", JSON.stringify(favoriler));
+  });
+
+// ANA SAYFADAKİ "FAVORİLERİM" TIKLANINCA YAPILACAKLAR
+document.getElementById("btn-favorites").addEventListener("click", function () {
+  const butunKartlar = document.querySelectorAll(".element-card");
+
+  butunKartlar.forEach((kart) => {
+    // Eğer kartın sembolü favoriler listemizin içinde geçiyorsa parlat, yoksa karart
+    if (favoriler.includes(kart.dataset.symbol)) {
+      kart.style.opacity = "1";
+      kart.style.transform = "scale(1)";
+    } else {
+      kart.style.opacity = "0.1";
+      kart.style.transform = "scale(0.95)";
+    }
   });
 });
