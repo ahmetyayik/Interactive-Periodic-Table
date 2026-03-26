@@ -80,3 +80,11 @@ body {
 .unknown-but-predicted-to-be-an-alkali-metal {
   background-color: #e8e8e8;
 }
+
+/* Seçili olan filtre butonunun stili */
+.active-filter {
+  background-color: #212529 !important;
+  color: white !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}

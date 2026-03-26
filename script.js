@@ -7,11 +7,15 @@ function loadPeriodicTable() {
   fetch(API_URL)
     .then((response) => response.json())
     .then((data) => {
-      const elements = data.elements; // 118 elementlik listeyi al
-      buildTable(elements);
+      tumElementler = data.elements; // 118 elementlik listeyi al
+      buildTable(tumElementler);
     })
     .catch((error) => console.error("Veri çekilirken hata oluştu:", error));
 }
+
+let tumElementler = [];
+let dogruCevap = null;
+let skor = 0;
 
 let favoriler = JSON.parse(localStorage.getItem("kimyaFavoriler")) || [];
 let seciliElementSembolu = ""; // Hangi elementin modalı açık tutmak için
@@ -126,18 +130,25 @@ const filterButtons = document.querySelectorAll("#filter-buttons button");
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", function () {
-    //Tıklanan butonun "data-filter" değerini al
+    //ÖNCE: Diğer tüm butonlardaki "active-filter" sınıfını temizle
+    filterButtons.forEach((btn) => btn.classList.remove("active-filter"));
+
+    //SONRA: Sadece tıklanan butona bu sınıfı ekle
+    this.classList.add("active-filter");
+
     const secilenKategori = this.dataset.filter;
     const butunKartlar = document.querySelectorAll(".element-card");
+
+    if (this.id === "btn-favorites") return;
+
     butunKartlar.forEach((kart) => {
       if (
         secilenKategori === "all" ||
         kart.dataset.category === secilenKategori
       ) {
-        kart.style.opacity = "1"; // Işıkları yak
-        kart.style.transform = "scale(1)"; // Normal boyuta getir
+        kart.style.opacity = "1";
+        kart.style.transform = "scale(1)";
       } else {
-        // Eşleşmeyen elementlerin ışığını kıs
         kart.style.opacity = "0.1";
         kart.style.transform = "scale(0.95)";
       }
@@ -161,7 +172,7 @@ document
       this.classList.replace("btn-warning", "btn-danger");
     }
 
-    // Değişen listeyi tarayıcının çekmecesine (localStorage) geri koy
+    // Değişen listeyi tarayıcının (localStorage) geri koy
     localStorage.setItem("kimyaFavoriler", JSON.stringify(favoriler));
   });
 
@@ -180,3 +191,68 @@ document.getElementById("btn-favorites").addEventListener("click", function () {
     }
   });
 });
+
+// QUİZ BAŞLATICI
+document.getElementById("startQuizBtn").addEventListener("click", () => {
+  skor = 0;
+  document.getElementById("quizScore").innerText = skor;
+  yeniSoruSor();
+  const quizModal = new bootstrap.Modal(document.getElementById("quizModal"));
+  quizModal.show();
+});
+
+function yeniSoruSor() {
+  dogruCevap = tumElementler[Math.floor(Math.random() * tumElementler.length)];
+
+  //Yanlış şıkları hazırla
+  let yanlisSiklar = [];
+  while (yanlisSiklar.length < 3) {
+    let rastgele =
+      tumElementler[Math.floor(Math.random() * tumElementler.length)];
+    if (
+      rastgele.symbol !== dogruCevap.symbol &&
+      !yanlisSiklar.includes(rastgele)
+    ) {
+      yanlisSiklar.push(rastgele);
+    }
+  }
+
+  //Şıkları karıştır (Doğru + Yanlışlar)
+  let tumSiklar = [dogruCevap, ...yanlisSiklar].sort(() => Math.random() - 0.5);
+
+  //Ekrana Yazdır
+  document.getElementById("quizSymbol").innerText = dogruCevap.symbol;
+  const optionsDiv = document.getElementById("quizOptions");
+  optionsDiv.innerHTML = "";
+
+  tumSiklar.forEach((sik) => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-outline-dark btn-lg py-3 fw-bold";
+    btn.innerText = sik.name;
+    btn.onclick = () => cevabiKontrolEt(sik.symbol === dogruCevap.symbol, btn);
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function cevabiKontrolEt(dogruMu, buton) {
+  const butunSiklar = document.querySelectorAll("#quizOptions button");
+
+  if (dogruMu) {
+    // Doğru bildiyse: Yeşile boya ve puan ver
+    buton.classList.replace("btn-outline-dark", "btn-success");
+    skor += 10;
+    document.getElementById("quizScore").innerText = skor;
+  } else {
+    // Yanlış bildiyse: Bastığı butonu KIRMIZI yap
+    buton.classList.replace("btn-outline-dark", "btn-danger");
+
+    //Doğru olan şıkkı bulup onu YEŞİL yap
+    butunSiklar.forEach((sik) => {
+      if (sik.innerText === dogruCevap.name) {
+        sik.classList.replace("btn-outline-dark", "btn-success");
+        sik.style.borderWidth = "3px";
+      }
+    });
+  }
+  setTimeout(() => yeniSoruSor(), 1500);
+}

@@ -20,6 +20,9 @@
         <span class="navbar-brand mb-0 h1 fs-2 fw-bold text-light">
           🧪 Interactive Periodic Table
         </span>
+        <button class="btn btn-warning fw-bold me-3" id="startQuizBtn">
+          🎮 Start Quiz
+        </button>
 
         <form class="d-flex" onsubmit="return false;">
           <input
@@ -33,7 +36,10 @@
       </div>
     </nav>
     <div class="container mb-4 text-center" id="filter-buttons">
-      <button class="btn btn-outline-dark btn-sm m-1 fw-bold" data-filter="all">
+      <button
+        class="btn btn-outline-dark btn-sm m-1 fw-bold active-filter"
+        data-filter="all"
+      >
         All Elements
       </button>
       <button
@@ -44,6 +50,12 @@
       </button>
       <button
         class="btn btn-outline-warning btn-sm m-1"
+        data-filter="alkaline-earth-metal"
+      >
+        Alkaline Earth Metals
+      </button>
+      <button
+        class="btn btn-outline-secondary btn-sm m-1"
         data-filter="transition-metal"
       >
         Transition Metals
@@ -55,16 +67,19 @@
         class="btn btn-outline-success btn-sm m-1"
         data-filter="diatomic-nonmetal"
       >
-        Non-metals
+        Diatomic Nonmetals
+      </button>
+      <!--<button class="btn btn-outline-primary btn-sm m-1" data-filter="halogen">
+        Diatomic-poliatomic nonmetals
+      </button>-->
+      <button class="btn btn-outline-dark btn-sm m-1" data-filter="lanthanide">
+        Lanthanoid Elements
+      </button>
+      <button class="btn btn-outline-dark btn-sm m-1" data-filter="actinide">
+        Actinoid Elements
       </button>
       <button
-        class="btn btn-outline-secondary btn-sm m-1"
-        data-filter="metalloid"
-      >
-        Metalloids
-      </button>
-      <button
-        class="btn btn-outline-primary btn-sm m-1 fw-bold"
+        class="btn btn-outline-primary btn-sm m-1 fw-bold border-2"
         id="btn-favorites"
       >
         ⭐ Favorites
@@ -121,6 +136,32 @@
                 <strong>Summary:</strong>
                 <p id="modalSummary" class="small text-muted"></p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="quizModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title fw-bold">🧪 Periodic Table Quiz</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center p-5">
+            <p class="text-muted">Which element does this symbol belong to?</p>
+            <h1 id="quizSymbol" class="display-1 fw-bold mb-4 text-primary">
+              ??
+            </h1>
+            <div id="quizOptions" class="d-grid gap-2"></div>
+            <hr />
+            <div class="fw-bold fs-5">
+              Skor: <span id="quizScore" class="text-success">0</span>
             </div>
           </div>
         </div>
