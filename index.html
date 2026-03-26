@@ -69,9 +69,6 @@
       >
         Diatomic Nonmetals
       </button>
-      <!--<button class="btn btn-outline-primary btn-sm m-1" data-filter="halogen">
-        Diatomic-poliatomic nonmetals
-      </button>-->
       <button class="btn btn-outline-dark btn-sm m-1" data-filter="lanthanide">
         Lanthanoid Elements
       </button>
@@ -93,7 +90,11 @@
         </p>
       </header>
 
-      <div id="periodic-table-container" class="row g-2"></div>
+      <div class="container-fluid px-0">
+        <div class="table-responsive">
+          <div id="periodic-table-container"></div>
+        </div>
+      </div>
     </div>
     <!-- BOOTSTRAP MODAL -->
     <div
@@ -103,7 +104,7 @@
       aria-labelledby="modalTitle"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="modalTitle">Element Name</h5>
